@@ -5,6 +5,7 @@ import { getAllPosts } from 'lib/api'
 import Posts from 'components/posts'
 import { getPlaiceholder } from 'plaiceholder'
 import { eyecatchLocal } from 'lib/constants'
+import { getImageBuffer } from 'lib/getImageBuffer'
 
 const Blog = ({ posts }) => {
   return (
@@ -26,7 +27,8 @@ export async function getStaticProps () {
       post.eyecatch = eyecatchLocal
     }
 
-    const { base64 } = await getPlaiceholder(post.eyecatch.url)
+    const imageBuffer = await getImageBuffer(post.eyecatch.url)
+    const { base64 } = await getPlaiceholder(imageBuffer)
     post.eyecatch.blurDataURL = base64
   }
 
