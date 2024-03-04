@@ -3,7 +3,6 @@ import Container from 'components/container'
 import PostHeader from 'components/post-header'
 import Posts from 'components/posts'
 import { getPlaiceholder } from 'plaiceholder'
-import { getImageBuffer } from 'lib/getImageBuffer'
 import { eyecatchLocal } from 'lib/constants'
 import Meta from 'components/meta'
 
@@ -35,19 +34,19 @@ export async function getStaticProps (context) {
   const posts = await getAllPostsByCategory(cat.id)
 
   for (const post of posts) {
-    if (!post.hasOwnProperty('eyecatch')) {
+    // 37行目を修正
+    if (!Object.prototype.hasOwnProperty.call(post, 'eyecatch')) {
       post.eyecatch = eyecatchLocal
     }
 
-    const imageBuffer = await getImageBuffer(post.eyecatch.url)
-    const { base64 } = await getPlaiceholder(imageBuffer)
+    const { base64 } = await getPlaiceholder(post.eyecatch.url)
     post.eyecatch.blurDataURL = base64
   }
 
   return {
     props: {
       name: cat.name,
-      posts: posts
+      posts
     }
   }
 }
